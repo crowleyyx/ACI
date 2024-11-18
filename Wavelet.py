@@ -6,37 +6,36 @@ import matplotlib.pyplot as plt
 
 def wavelet_denoising(image_path, wavelet='db1', threshold_scaling=0.1):
 
-    # Load the image in grayscale
+
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if image is None:
         print("Error: Unable to load the image. Please check the file path.")
         return
 
-    # Normalize the image
-    image = image / 255.0  # Scale pixel values to [0, 1]
 
-    # Perform wavelet decomposition
-    coeffs = pywt.wavedec2(image, wavelet, level=None)  # Decompose to wavelet coefficients
+    image = image / 255.0  
 
-    # Determine threshold
-    sigma = np.median(np.abs(coeffs[-1])) / 0.6745  # Estimate noise standard deviation
+
+    coeffs = pywt.wavedec2(image, wavelet, level=None)  
+   
+    sigma = np.median(np.abs(coeffs[-1])) / 0.6745  
     threshold = threshold_scaling * sigma
 
-    # Thresholding: Apply soft thresholding to detail coefficients
-    thresholded_coeffs = [coeffs[0]]  # Keep the approximation coefficients
+
+    thresholded_coeffs = [coeffs[0]] 
     for detail_coeffs in coeffs[1:]:
         thresholded_coeffs.append(tuple(
             pywt.threshold(c, value=threshold, mode='soft') for c in detail_coeffs
         ))
 
-    # Reconstruct the image from thresholded coefficients
+
     denoised_image = pywt.waverec2(thresholded_coeffs, wavelet)
 
-    # Clip values to valid range and rescale to [0, 255]
+  
     denoised_image = np.clip(denoised_image, 0, 1) * 255
     denoised_image = denoised_image.astype(np.uint8)
 
-    # Display the original and denoised images
+
     plt.figure(figsize=(10, 5))
     plt.subplot(1, 2, 1)
     plt.title("Original Image")
@@ -52,6 +51,6 @@ def wavelet_denoising(image_path, wavelet='db1', threshold_scaling=0.1):
     plt.show()
 
 if __name__ == "__main__":
-    # Specify the image path
-    image_path = "path_to_your_image.jpg"  # Replace with your image path
+
+    image_path = "assets\\photono1.png"  
     wavelet_denoising(image_path, wavelet='db1', threshold_scaling=0.1)
