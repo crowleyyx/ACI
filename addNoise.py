@@ -35,7 +35,7 @@ def add_salt_and_pepper(image, salt_prob=0.01, pepper_prob=0.01):
 # Function to add Speckle noise
 def add_speckle_noise(image):
     speckle_noise = np.random.normal(0, 1, image.shape).astype(np.float32)
-    noisy_image = image + image * speckle_noise
+    noisy_image = image + image * speckle_noise*0.5
     return np.clip(noisy_image, 0, 255).astype(np.uint8)
 
 # Main program
