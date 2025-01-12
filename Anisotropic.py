@@ -89,7 +89,7 @@ def plot_edges(edges_original, edges_denoised, edge_difference):
     plt.show()
 
 # Load the image
-image_path = "assets\\photono1.png"
+image_path = "assets\\SpeckleSlobozia.png"
 image = cv2.imread(image_path)
 if image is None:
     print("Error: Unable to load the image. Please check the file path.")
